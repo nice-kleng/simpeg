@@ -1,0 +1,196 @@
+@extends('layouts.app', ['pageTitle' => 'Update Report Konten TikTok'])
+
+@push('styles')
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+@endpush
+
+@section('content')
+
+@if ($errors->any())
+<div class="alert alert-danger">
+    <ul>
+        @foreach ($errors->all() as $error)
+        <li>{{ $error }}</li>
+        @endforeach
+    </ul>
+</div>
+@endif
+
+<div class="row">
+    <div class="col-md-12 col-sm-12">
+        <div class="x_panel">
+            <div class="x_title">
+                <h2>Update Report Konten TikTok</h2>
+                <a href="{{ route('reportTikTok.index') }}" class="btn btn-secondary pull-right">Kembali</a>
+                <div class="clearfix"></div>
+            </div>
+            <div class="x_content">
+                <form id="report-form" action="{{ route('reportTikTok.update', $reportTikTok->kd_report_tiktok) }}" method="POST">
+                    @csrf
+                    @method('PUT')
+                    <div id="wizard" class="form_wizard wizard_horizontal">
+                        <ul class="wizard_steps">
+                            <li><a href="#step-1"><span class="step_no">1</span><span class="step_descr">Informasi Dasar</span></a></li>
+                            <li><a href="#step-2"><span class="step_no">2</span><span class="step_descr">Detil Konten</span></a></li>
+                            <li><a href="#step-3"><span class="step_no">3</span><span class="step_descr">Statistik Engagement</span></a></li>
+                            <li><a href="#step-4"><span class="step_no">4</span><span class="step_descr">Demografi</span></a></li>
+                            <li><a href="#step-5"><span class="step_no">5</span><span class="step_descr">Statistik Lanjutan</span></a></li>
+                        </ul>
+                        
+                        <div id="step-1">
+                            <h2 class="StepTitle">Step 1: Informasi Dasar</h2>
+                            <div class="form-group">
+                                <label for="tanggal">Tanggal</label>
+                                <input type="date" class="form-control" id="tanggal" name="tanggal" value="{{ old('tanggal', $reportTikTok->tanggal) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="tipe_konten">Tipe Konten</label>
+                                <select name="tipe_konten" id="tipe_konten" class="form-control">
+                                    <option value="">--Pilih Tipe Konten--</option>
+                                    <option value="Reels" {{ old('tipe_konten', $reportTikTok->tipe_konten) == 'Reels' ? 'selected' : '' }}>Reels</option>
+                                    <option value="Other" {{ old('tipe_konten', $reportTikTok->tipe_konten) == 'Other' ? 'selected' : '' }}>Other</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="jenis_konten">Jenis Konten</label>
+                                <select name="jenis_konten" id="jenis_konten" class="form-control">
+                                    <option value="">--Pilih Jenis Konten--</option>
+                                    <option value="Educate" {{ old('jenis_konten', $reportTikTok->jenis_konten) == 'Educate' ? 'selected' : '' }}>Educate</option>
+                                    <option value="Inspire" {{ old('jenis_konten', $reportTikTok->jenis_konten) == 'Inspire' ? 'selected' : '' }}>Inspire</option>
+                                    <option value="Entertain" {{ old('jenis_konten', $reportTikTok->jenis_konten) == 'Entertain' ? 'selected' : '' }}>Entertain</option>
+                                    <option value="Convience" {{ old('jenis_konten', $reportTikTok->jenis_konten) == 'Convience' ? 'selected' : '' }}>Convience</option>
+                                    <option value="Testimonial" {{ old('jenis_konten', $reportTikTok->jenis_konten) == 'Testimonial' ? 'selected' : '' }}>Testimonial</option>
+                                    <option value="Commercial" {{ old('jenis_konten', $reportTikTok->jenis_konten) == 'Commercial' ? 'selected' : '' }}>Commercial</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div id="step-2">
+                            <h2 class="StepTitle">Step 2: Detil Konten</h2>
+                            <div class="form-group">
+                                <label for="produk">Produk</label>
+                                <select name="produk" id="produk" class="form-control select2" style="width: 100%;">
+                                    <option value="">--Pilih Produk--</option>
+                                    @foreach ($products as $product)
+                                    <option value="{{ $product->nama_product }}" {{ (old('produk', $reportTikTok->produk) == $product->nama_product) ? 'selected' : '' }}>{{ $product->nama_product }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="hook_konten">Hook Konten</label>
+                                <textarea class="form-control" id="hook_konten" name="hook_konten" rows="3">{{ old('hook_konten', $reportTikTok->hook_konten) }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="copywriting">Copywriting</label>
+                                <textarea class="form-control" id="copywriting" name="copywriting" rows="3">{{ old('copywriting', $reportTikTok->copywriting) }}</textarea>
+                            </div>
+                            <div class="form-group">
+                                <label for="jam_upload">Jam Upload</label>
+                                <input type="time" class="form-control" id="jam_upload" name="jam_upload" value="{{ old('jam_upload', $reportTikTok->jam_upload) }}">
+                            </div>
+                        </div>
+
+                        <div id="step-3">
+                            <h2 class="StepTitle">Step 3: Statistik Engagement</h2>
+                            <div class="form-group">
+                                <label for="views">Views</label>
+                                <input type="number" class="form-control" id="views" name="views" value="{{ old('views', $reportTikTok->views) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="like">Like</label>
+                                <input type="number" class="form-control" id="like" name="like" value="{{ old('like', $reportTikTok->like) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="comment">Comment</label>
+                                <input type="number" class="form-control" id="comment" name="comment" value="{{ old('comment', $reportTikTok->comment) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="share">Share</label>
+                                <input type="number" class="form-control" id="share" name="share" value="{{ old('share', $reportTikTok->share) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="save">Save</label>
+                                <input type="number" class="form-control" id="save" name="save" value="{{ old('save', $reportTikTok->save) }}">
+                            </div>
+                        </div>
+
+                        <div id="step-4">
+                            <h2 class="StepTitle">Step 4: Demografi</h2>
+                            <div class="form-group">
+                                <label for="usia_18_24">Usia 18-24</label>
+                                <input type="number" class="form-control" id="usia_18_24" name="usia_18_24" value="{{ old('usia_18_24', $reportTikTok->usia_18_24) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="usia_25_34">Usia 25-34</label>
+                                <input type="number" class="form-control" id="usia_25_34" name="usia_25_34" value="{{ old('usia_25_34', $reportTikTok->usia_25_34) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="usia_35_44">Usia 35-44</label>
+                                <input type="number" class="form-control" id="usia_35_44" name="usia_35_44" value="{{ old('usia_35_44', $reportTikTok->usia_35_44) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="usia_45_54">Usia 45-54</label>
+                                <input type="number" class="form-control" id="usia_45_54" name="usia_45_54" value="{{ old('usia_45_54', $reportTikTok->usia_45_54) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="gender_pria">Gender Pria (%)</label>
+                                <input type="number" class="form-control" id="gender_pria" name="gender_pria" value="{{ old('gender_pria', $reportTikTok->gender_pria) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="gender_wanita">Gender Wanita (%)</label>
+                                <input type="number" class="form-control" id="gender_wanita" name="gender_wanita" value="{{ old('gender_wanita', $reportTikTok->gender_wanita) }}">
+                            </div>
+                        </div>
+
+                        <div id="step-5">
+                            <h2 class="StepTitle">Step 5: Statistik Lanjutan</h2>
+                            <div class="form-group">
+                                <label for="total_pemutaran">Total Pemutaran</label>
+                                <input type="number" class="form-control" id="total_pemutaran" name="total_pemutaran" value="{{ old('total_pemutaran', $reportTikTok->total_pemutaran) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="rata_menonton">Rata-rata Menonton</label>
+                                <input type="number" step="0.01" class="form-control" id="rata_menonton" name="rata_menonton" value="{{ old('rata_menonton', $reportTikTok->rata_menonton) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="view_utuh">View Utuh</label>
+                                <input type="number" class="form-control" id="view_utuh" name="view_utuh" value="{{ old('view_utuh', $reportTikTok->view_utuh) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="pengikut_baru">Pengikut Baru</label>
+                                <input type="number" class="form-control" id="pengikut_baru" name="pengikut_baru" value="{{ old('pengikut_baru', $reportTikTok->pengikut_baru) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="link_konten">Link Konten</label>
+                                <input type="url" class="form-control" id="link_konten" name="link_konten" value="{{ old('link_konten', $reportTikTok->link_konten) }}">
+                            </div>
+                            <div class="form-group">
+                                <label for="pics">Pics</label>
+                                <select name="pics[]" id="pics" class="form-control select2" multiple style="width: 100%;">
+                                    @foreach ($pics as $pic)
+                                    <option value="{{ $pic->id }}" {{ (is_array(old('pics')) && in_array($pic->id, old('pics'))) || (is_array($reportTikTok->pics->pluck('id')->toArray()) && in_array($pic->id, $reportTikTok->pics->pluck('id')->toArray())) ? 'selected' : '' }}>{{ $pic->name }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@endsection
+
+@push('scripts')
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script src="{{ asset('assets/vendors/jQuery-Smart-Wizard/js/jquery.smartWizard.js') }}"></script>
+<script>
+    $(document).ready(function() {
+        $('#wizard').smartWizard();
+        $('.select2').select2({
+            allowClear: true,
+        });
+    });
+</script>
+@endpush
