@@ -68,4 +68,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(ReportTikTokLive::class, 'report_tik_tok_live_user', 'user_id', 'report_tiktok_live_id')->withTimestamps();
     }
+
+    public function marketings()
+    {
+        return $this->belongsToMany(Marketing::class, 'marketing_users', 'user_id', 'marketing_id');
+    }
+
+    public function marketingSign()
+    {
+        return $this->belongsToMany(Marketing::class, 'follow_up_marketuser', 'user_id', 'marketing_id');
+    }
 }

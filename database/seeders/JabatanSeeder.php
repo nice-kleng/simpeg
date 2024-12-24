@@ -25,7 +25,6 @@ class JabatanSeeder extends Seeder
 
             // Marketing
             ['nama_jabatan' => 'Kepala Divisi Marketing'],
-            ['nama_jabatan' => 'Manajer Pemasaran'],
             ['nama_jabatan' => 'Spesialis SEO'],
             ['nama_jabatan' => 'Analis Pemasaran'],
             ['nama_jabatan' => 'Manajer Kampanye Digital'],

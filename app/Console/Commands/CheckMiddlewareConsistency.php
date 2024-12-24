@@ -57,8 +57,6 @@ class CheckMiddlewareConsistency extends Command
                     }
                 }
             }
-
-            // You can add more specific checks here
         }
 
         if (empty($inconsistencies)) {

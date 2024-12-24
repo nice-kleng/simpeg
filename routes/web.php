@@ -1,8 +1,13 @@
 <?php
 
+use App\Exports\TurlapExport;
 use App\Http\Controllers\AuthenticateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\Marketing\BrandController;
+use App\Http\Controllers\Marketing\LeadsController;
+use App\Http\Controllers\Marketing\SumberMarketingController;
+use App\Http\Controllers\Marketing\TurlapController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\PegawaiController;
 use App\Http\Controllers\ProductController;
@@ -13,11 +18,14 @@ use App\Http\Controllers\SuperadminController;
 use App\Http\Controllers\Sosmed\TimelineInstagramController;
 use App\Http\Controllers\Sosmed\TimelineTiktokController;
 use Illuminate\Support\Facades\Route;
+use Maatwebsite\Excel\Facades\Excel;
 
 Route::get('/', function () {
     return view('auth.login');
 });
-
+Route::get('turlap/export', function () {
+    return Excel::download(new TurlapExport(), 'turlap.xlsx');
+});
 Route::get('login', [AuthenticateController::class, 'login'])->name('login');
 Route::post('login', [AuthenticateController::class, 'authenticate']);
 Route::post('logout', [AuthenticateController::class, 'logout'])->name('logout');
@@ -97,4 +105,61 @@ Route::group(['middleware' => ['auth']], function () {
     // Route::controller(SosmedController::class)->group(function () {
     //     Route::get('sosmed/dashboard', 'index')->name('sosmed.dashboard');
     // });
+
+    Route::controller(SumberMarketingController::class)->group(function () {
+        // Route::get('sumberMarketing', 'index')->name('sumberMarketing.index');
+        Route::get('sumberMarketing/create', 'create')->name('sumberMarketing.create');
+        Route::post('sumberMarketing/store', 'store')->name('sumberMarketing.store');
+        Route::get('sumberMarketing/{sumberMarketing}/edit', 'edit')->name('sumberMarketing.edit');
+        Route::put('sumberMarketing/{sumberMarketing}', 'update')->name('sumberMarketing.update');
+        Route::delete('sumberMarketing/{sumberMarketing}', 'destroy')->name('sumberMarketing.destroy');
+    });
+
+    Route::controller(TurlapController::class)->group(function () {
+        Route::get('turlap', 'index')->name('turlap.index');
+        Route::get('turlap/{id}', 'detailTurlapByArea')->name('turlap.detailTurlapByArea');
+        Route::post('turlap/store', 'store')->name('turlap.store');
+        Route::get('turlap/{id}/edit', 'edit')->name('turlap.edit');
+        Route::put('turlap/{id}', 'update')->name('turlap.update');
+        Route::delete('turlap/{id}', 'destroy')->name('turlap.destroy');
+        Route::get('turlap/{id}/followUp', 'followUp')->name('turlap.followUp');
+        Route::post('turlap/{id}/followUp/store', 'followUpStore')->name('turlap.followUpStore');
+        Route::get('turlap/{id}/followUp/edit', 'followUpEdit')->name('turlap.followUpEdit');
+        Route::put('turlap/{id}/followUp/update', 'followUpUpdate')->name('turlap.followUpUpdate');
+        Route::delete('turlap/{id}/followUp/destroy', 'followUpDestroy')->name('turlap.followUpDestroy');
+        Route::get('data-turlap', 'tampilTurlap')->name('turlap.tampilTurlap');
+        Route::get('/report-turlap', 'preview')->name('turlap.preview');
+        Route::post('/preview-turlap', 'preview')->name('turlap.preview.data');
+        Route::post('/export-turlap', 'export')->name('turlap.export.excel');
+    });
+
+    Route::controller(LeadsController::class)->group(function () {
+        Route::get('leads', 'index')->name('leads.index');
+        Route::get('leads/{id}', 'detailLeadsByArea')->name('leads.detailLeadsByArea');
+        Route::post('leads/store', 'store')->name('leads.store');
+        Route::get('leads/{id}/edit', 'edit')->name('leads.edit');
+        Route::put('leads/{id}', 'update')->name('leads.update');
+        Route::delete('leads/{id}', 'destroy')->name('leads.destroy');
+        Route::get('leads/{id}/followUp', 'followUp')->name('leads.followUp');
+        Route::post('leads/{id}/followUp/store', 'followUpStore')->name('leads.followUpStore');
+        Route::get('leads/{id}/followUp/edit', 'followUpEdit')->name('leads.followUpEdit');
+        Route::put('leads/{id}/followUp/update', 'followUpUpdate')->name('leads.followUpUpdate');
+        Route::delete('leads/{id}/followUp/destroy', 'followUpDestroy')->name('leads.followUpDestroy');
+        Route::get('data-leads', 'tampilLeads')->name('leads.tampilLeads');
+    });
+
+    Route::controller(BrandController::class)->group(function () {
+        Route::get('brand', 'index')->name('brand.index');
+        Route::get('brand/{id}', 'detailBrandByArea')->name('brand.detailBrandByArea');
+        Route::post('brand/store', 'store')->name('brand.store');
+        Route::get('brand/{id}/edit', 'edit')->name('brand.edit');
+        Route::put('brand/{id}', 'update')->name('brand.update');
+        Route::delete('brand/{id}', 'destroy')->name('brand.destroy');
+        Route::get('brand/{id}/followUp', 'followUp')->name('brand.followUp');
+        Route::post('brand/{id}/followUp/store', 'followUpStore')->name('brand.followUpStore');
+        Route::get('brand/{id}/followUp/edit', 'followUpEdit')->name('brand.followUpEdit');
+        Route::put('brand/{id}/followUp/update', 'followUpUpdate')->name('brand.followUpUpdate');
+        Route::delete('brand/{id}/followUp/destroy', 'followUpDestroy')->name('brand.followUpDestroy');
+        Route::get('data-brand', 'tampilBrand')->name('brand.tampilBrand');
+    });
 });

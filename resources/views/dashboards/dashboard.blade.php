@@ -13,6 +13,14 @@
             'permission' => 'View Sosmed Pegawai Dashboard',
             'view' => 'dashboards.staff_sosmed',
         ],
+        'marketing_kadiv' => [
+            'permission' => 'View Marketing Kadiv Dashboard',
+            'view' => 'dashboards.kadiv_marketing',
+        ],
+        'marketing_staff' => [
+            'permission' => 'View Marketing Pegawai Dashboard',
+            'view' => 'dashboards.staff_marketing',
+        ]
     ];
 
     $userDashboards = collect($dashboards)->filter(function ($dashboard) {
@@ -20,11 +28,11 @@
     });
 
     // batasi hanya pada dashboard kadiv
-    if (auth()->user()->hasRole('Super Admin')) {
-        $userDashboards = $userDashboards->filter(function ($dashboard, $key) {
-            return str_contains($key, 'kadiv');
-        });
-    }
+    // if (auth()->user()->hasRole('Super Admin')) {
+    //     $userDashboards = $userDashboards->filter(function ($dashboard, $key) {
+    //         return str_contains($key, 'kadiv');
+    //     });
+    // }
 
 @endphp
 

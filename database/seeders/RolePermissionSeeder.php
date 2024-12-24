@@ -28,6 +28,12 @@ class RolePermissionSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'Marketing',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         Role::insert($role);
@@ -227,7 +233,7 @@ class RolePermissionSeeder extends Seeder
 
         // $superAdmin = Role::where('name', 'Super Admin')->first();
         $contentCreator = Role::where('name', 'Content Creator')->first();
-
+        $marketing = Role::where('name', 'Marketing')->first();
         // $superAdmin->givePermissionTo([
         //     'View Jabatan',
         //     'Create Jabatan',
@@ -282,6 +288,28 @@ class RolePermissionSeeder extends Seeder
             'Edit Report TikTok Live',
             'Delete Report TikTok Live',
             'Export Report TikTok Live',
+        ]);
+
+        $marketing->givePermissionTo([
+            'Follow Up Leads',
+            'View Leads',
+            'Create Leads',
+            'Update Leads',
+            'Delete Leads',
+            'Follow Up Brand',
+            'View Brand',
+            'Create Brand',
+            'Edit Brand',
+            'Delete Brand',
+            'Follow Up Turlap',
+            'View Turlap',
+            'Create Turlap',
+            'Edit Turlap',
+            'Delete Turlap',
+            'View Sumber Marketing',
+            'Create Sumber Marketing',
+            'Edit Sumber Marketing',
+            'Delete Sumber Marketing',
         ]);
     }
 }

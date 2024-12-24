@@ -117,7 +117,7 @@ class TimelineInstagramController extends Controller implements HasMiddleware
         ]);
 
         $pics = $request->pics ?? [];
-        if (!Auth::user()->hasRole('Super Admin')) {
+        if (!Auth::user()->hasRole('Super Admin') || !Auth::user()->hasPermissionTo('View Sosmed Kadiv Dashboard')) {
             $pics[] = Auth::user()->id;
         }
         $pics = array_unique($pics);

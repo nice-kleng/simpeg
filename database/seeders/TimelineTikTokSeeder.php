@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\TimelineTiktok;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -17,7 +18,7 @@ class TimelineTikTokSeeder extends Seeder
         $products = \App\Models\Product::all();
 
         for ($i = 0; $i < 20; $i++) {
-            $report = \App\Models\TimelineTikTok::create([
+            $report = TimelineTiktok::create([
                 // 'kd_timeline_tiktok' => 'TT' . str_pad($i + 1, 3, '0', STR_PAD_LEFT),
                 'tanggal' => $faker->dateTimeBetween('-1 month', 'now'),
                 'tipe_konten' => $faker->randomElement(['Reels', 'Other']),

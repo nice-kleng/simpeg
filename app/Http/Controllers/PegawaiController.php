@@ -60,7 +60,14 @@ class PegawaiController extends Controller implements HasMiddleware
     {
         $jabatan = Jabatan::all();
         $roles = Role::all();
-        return view('superadmin.pegawai.create', compact('jabatan', 'roles'));
+        $permissions = [
+            'View Sosmed Kadiv Dashboard',
+            'View Sosmed Pegawai Dashboard',
+            'View Marketing Pegawai Dashboard',
+            'View Marketing Kadiv Dashboard',
+        ];
+
+        return view('superadmin.pegawai.create', compact('jabatan', 'roles', 'permissions'));
     }
 
     /**

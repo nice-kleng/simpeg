@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Marketing;
 use App\Models\ReportTikTok;
 use App\Models\ReportTikTokLive;
 use App\Models\ReportTimelineInstagram;
@@ -12,18 +13,19 @@ use Illuminate\Http\Request;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
+use Spatie\Permission\Models\Permission;
 use Yajra\DataTables\Facades\DataTables;
 
 class DashboardController extends Controller implements HasMiddleware
 {
     public static function middleware(): array
     {
-        return [new Middleware('permission:View Superadmin Dashboard|View Sosmed Kadiv Dashboard|View Sosmed Pegawai Dashboard', only: ['index'])];
+        return [new Middleware('permission:View Superadmin Dashboard|View Sosmed Kadiv Dashboard|View Sosmed Pegawai Dashboard|View Marketing Kadiv Dashboard|View Marketing Pegawai Dashboard', only: ['index'])];
     }
 
     public function index()
     {
-        if (Auth::user()->can('View Sosmed Kadiv Dashboard') || Auth::user()->can('View Sosmed Kadiv Dashboard')) {
+        if (Auth::user()->can('View Sosmed Kadiv Dashboard')) {
             $data['pegawai'] = User::role('Content Creator')
                 ->whereDoesntHave('permissions', function ($query) {
                     $query->where('name', 'View Sosmed Kadiv Dashboard');
@@ -46,7 +48,9 @@ class DashboardController extends Controller implements HasMiddleware
             $data['new_ig_follower'] = ReportTimelineInstagram::whereHas('timelineInstagram', function ($query) {
                 $query->whereMonth('tanggal', now()->month);
             })->sum('pengikut');
-        } else {
+        }
+
+        if (Auth::user()->can('View Sosmed Pegawai Dashboard')) {
             $data['tiktok_video'] = TimelineTiktok::whereMonth('tanggal', now()->month)
                 ->whereHas('pics', function ($query) {
                     $query->where('user_id', Auth::id());
@@ -96,6 +100,19 @@ class DashboardController extends Controller implements HasMiddleware
                 $query->whereMonth('tanggal', now()->month);
             })->sum('pengikut');
         }
+
+        if (Auth::user()->can('View Marketing Pegawai Dashboard')) {
+            $data['turlap'] = Marketing::where('akun_id', Auth::user()->id)->where('label', 'Turlap')->whereMonth('tanggal', now()->month)->count();
+            $data['leads'] = Marketing::where('akun_id', Auth::user()->id)->where('label', 'Leads')->whereMonth('tanggal', now()->month)->count();
+            $data['brand'] = Marketing::where('akun_id', Auth::user()->id)->where('label', 'Brand')->whereMonth('tanggal', now()->month)->count();
+        }
+
+        if (Auth::user()->can('View Marketing Kadiv Dashboard')) {
+            $data['turlap'] = Marketing::where('label', 'Turlap')->whereMonth('tanggal', now()->month)->count();
+            $data['leads'] = Marketing::where('label', 'Leads')->whereMonth('tanggal', now()->month)->count();
+            $data['brand'] = Marketing::where('label', 'Brand')->whereMonth('tanggal', now()->month)->count();
+        }
+
         return view('dashboards.dashboard', $data);
     }
 

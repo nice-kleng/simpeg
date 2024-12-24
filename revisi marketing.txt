@@ -1,0 +1,16 @@
+Table Follow_up : 
+- id
+- marketing_id
+- status_follow_up (Follow Up, Ditolak, Join) 
+- keterangan
+- followup
+- tanggal
+
+jika tidak punya relasi ke follow up atau tidak ada data follow up maka status follow up di halaman awal defaultnya Not Started
+
+- Tambah kolom nama, maps, rating (Minat & Mampu, Minat Tidak Mampu, Tidak Minat Mampu, Tidak Minat Tidak Mampu), di table marketing
+- sub menu untuk view data tiap label dan export 
+
+dashboard marketing (buat card)
+- jumlah tiap label
+- status tiap follow up

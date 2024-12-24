@@ -63,6 +63,15 @@
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group">
+                        <label for="permission">Permission</label>
+                        <div class="form-check">
+                            @foreach ($permissions as $permission)
+                                <input type="radio" name="permission[]" id="permission{{ $loop->iteration }}" value="{{ $permission }}">
+                                <label for="permission{{ $loop->iteration }}">{{ $permission }}</label>
+                            @endforeach
+                        </div>
+                    </div>
                     <button type="submit" class="btn btn-primary">Simpan</button>
                 </form>
             </div>
