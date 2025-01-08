@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Marketing;
 
+use App\Exports\BrandExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ImportMarketing;
 use App\Models\FollowUpMarketing;
 use App\Models\Marketing;
 use App\Models\SumberMarketing;
@@ -11,6 +13,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class BrandController extends Controller implements HasMiddleware
 {
@@ -134,5 +138,76 @@ class BrandController extends Controller implements HasMiddleware
     {
         $marketings = Marketing::where('label', 'Brand')->orderBy('tanggal', 'desc')->get();
         return view('marketing.brand.viewBrand', compact('marketings'));
+    }
+
+    public function preview(Request $request)
+    {
+        $query = Marketing::with(['followUp', 'pics', 'picSign'])
+            ->where('label', 'brand');
+
+        if ($request->s_date && $request->e_date) {
+            $query->whereBetween('tanggal', [$request->s_date, $request->e_date]);
+        }
+
+        $data = $query->get();
+
+        if ($request->ajax()) {
+            return response()->json([
+                'data' => $data,
+                'maxFollowUps' => $data->max(function ($item) {
+                    return $item->followUp->count();
+                })
+            ]);
+        }
+
+        return view('marketing.brand.report_brand', compact('data'));
+    }
+
+    public function export(Request $request)
+    {
+        if ($request->isMethod('post')) {
+            $fileName = 'brand_' . date('Y-m-d') . '.xlsx';
+            return Excel::download(
+                new BrandExport($request->s_date, $request->e_date),
+                $fileName
+            );
+        }
+
+        return redirect()->route('brand.preview');
+    }
+
+    public function unduhTemplateImport(string $id)
+    {
+        $inputFileName = storage_path('app/public/template_import.xlsx');
+        $reader = IOFactory::createReader('Xlsx');
+        $spreedsheet = $reader->load($inputFileName);
+        $sheet = $spreedsheet->getActiveSheet();
+
+        $sheet->setCellValue('A2', $id);
+        $sheet->setCellValue('H2', 'Brand');
+
+        $writer = IOFactory::createWriter($spreedsheet, 'Xlsx');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="template_import_brand.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function importBrand(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $file = $request->file('file');
+
+        try {
+            Excel::import(new ImportMarketing, $file);
+        } catch (\Exception $e) {
+            dd($e);
+            return redirect()->back()->with('message', 'Terjadi kesalahan saat mengimport data. Pastikan file yang diupload sesuai dengan template yang telah disediakan.')->with('type', 'danger')->with('title', 'Gagal');
+        }
     }
 }

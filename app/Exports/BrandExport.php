@@ -13,7 +13,7 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 
-class TurlapExport implements FromArray, WithHeadings, WithTitle, WithStyles, WithColumnWidths, WithCustomStartCell
+class BrandExport implements FromArray, WithHeadings, WithTitle, WithStyles, WithColumnWidths, WithCustomStartCell
 {
     private $maxFollowUps;
     private $startDate;
@@ -24,7 +24,7 @@ class TurlapExport implements FromArray, WithHeadings, WithTitle, WithStyles, Wi
         $this->startDate = $startDate;
         $this->endDate = $endDate;
 
-        $query = Marketing::with('followUp')->where('label', 'Leads');
+        $query = Marketing::with('followUp')->where('label', 'Brand');
 
         if ($startDate && $endDate) {
             $query->whereBetween('tanggal', [$startDate, $endDate]);
@@ -69,7 +69,7 @@ class TurlapExport implements FromArray, WithHeadings, WithTitle, WithStyles, Wi
 
         // Title Style
         $sheet->mergeCells("A1:{$lastColumn}1");
-        $sheet->setCellValue('A1', 'LAPORAN TURLAP MARKETING');
+        $sheet->setCellValue('A1', 'REPORT BRAND');
         $sheet->getStyle('A1')->applyFromArray([
             'font' => [
                 'bold' => true,
@@ -145,7 +145,7 @@ class TurlapExport implements FromArray, WithHeadings, WithTitle, WithStyles, Wi
 
     public function array(): array
     {
-        $query = Marketing::with('followUp')->wehere('label', 'Turlap');
+        $query = Marketing::with('followUp')->where('label', 'Leads');
 
         if ($this->startDate && $this->endDate) {
             $query->whereBetween('tanggal', [$this->startDate, $this->endDate]);

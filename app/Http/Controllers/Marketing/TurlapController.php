@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Marketing;
 
 use App\Exports\TurlapExport;
 use App\Http\Controllers\Controller;
+use App\Imports\ImportMarketing;
 use App\Models\FollowUpMarketing;
 use App\Models\Marketing;
 use App\Models\SumberMarketing;
@@ -13,6 +14,7 @@ use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Facades\Excel;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 
 class TurlapController extends Controller implements HasMiddleware
 {
@@ -177,5 +179,40 @@ class TurlapController extends Controller implements HasMiddleware
         }
 
         return redirect()->route('turlap.preview');
+    }
+
+    public function unduhTemplateImport(string $id)
+    {
+        $inputFileName = storage_path('app/public/template_import.xlsx');
+        $reader = IOFactory::createReader('Xlsx');
+        $spreedsheet = $reader->load($inputFileName);
+        $sheet = $spreedsheet->getActiveSheet();
+
+        $sheet->setCellValue('A2', $id);
+        $sheet->setCellValue('H2', 'Turlap');
+
+        $writer = IOFactory::createWriter($spreedsheet, 'Xlsx');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="template_import_turlap.xlsx"');
+        header('Cache-Control: max-age=0');
+
+        $writer->save('php://output');
+        exit;
+    }
+
+    public function importTurlap(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        $file = $request->file('file');
+
+        try {
+            Excel::import(new ImportMarketing, $file);
+        } catch (\Exception $e) {
+            dd($e);
+            return redirect()->back()->with('message', 'Terjadi kesalahan saat mengimport data. Pastikan file yang diupload sesuai dengan template yang telah disediakan.')->with('type', 'danger')->with('title', 'Gagal');
+        }
     }
 }

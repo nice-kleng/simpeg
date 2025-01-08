@@ -47,7 +47,7 @@
                             </li>
                             <li class="sub_menu"><a href="{{ route('leads.tampilLeads') }}">View</a>
                             </li>
-                            <li><a href="#level2_2">Report</a>
+                            <li><a href="{{ route('leads.preview') }}">Report</a>
                             </li>
                         </ul>
                     </li>
@@ -57,7 +57,7 @@
                             </li>
                             <li class="sub_menu"><a href="{{ route('brand.tampilBrand') }}">View</a>
                             </li>
-                            <li><a href="#level2_2">Report</a>
+                            <li><a href="{{ route('brand.preview') }}">Report</a>
                             </li>
                         </ul>
                     </li>
@@ -65,6 +65,12 @@
                     {{-- <li><a href="{{ route('turlap.index') }}">Turlap</a></li> --}}
                     {{-- <li><a href="{{ route('leads.index') }}">Leads</a></li>
                   <li><a href="{{ route('brand.index') }}">Brand</a></li> --}}
+                </ul>
+            </li>
+
+            <li><a><i class="fa fa-users"></i> CRM <span class="fa fa-chevron-down"></span></a>
+                <ul class="nav child_menu">
+                    <li><a href="{{ route('crm.pertanyaan.index') }}">Pertanyaan</a></li>
                 </ul>
             </li>
         </ul>

@@ -19,9 +19,9 @@
 <!-- PNotify -->
 <script src="{{ asset('assets/vendors/pnotify/dist/pnotify.js') }}"></script>
 <script src="{{ asset('assets/vendors/pnotify/dist/pnotify.buttons.js') }}"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-
-@if(session('message'))
+@if (session('message'))
     <script>
         new PNotify({
             title: '{{ session('title') }}',

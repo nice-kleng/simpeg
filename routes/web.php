@@ -4,12 +4,14 @@ use App\Exports\TurlapExport;
 use App\Http\Controllers\AuthenticateController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\JabatanController;
+use App\Http\Controllers\JadwalKunjunganController;
 use App\Http\Controllers\Marketing\BrandController;
 use App\Http\Controllers\Marketing\LeadsController;
 use App\Http\Controllers\Marketing\SumberMarketingController;
 use App\Http\Controllers\Marketing\TurlapController;
 use App\Http\Controllers\MitraController;
 use App\Http\Controllers\PegawaiController;
+use App\Http\Controllers\PertanyaanController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\Sosmed\ReportTikTokController;
 use App\Http\Controllers\Sosmed\ReportTikTokLiveController;
@@ -48,6 +50,9 @@ Route::group(['middleware' => ['auth']], function () {
         '/product' => ProductController::class,
         '/mitra' => MitraController::class,
     ]);
+
+    Route::get('/pegawai/setpermission/{id}', [PegawaiController::class, 'setPermission'])->name('pegawai.setPermission');
+    Route::put('/pegawai/store-permission/{id}', [PegawaiController::class, 'storePermission'])->name('pegawai.storePermission');
 
     Route::controller(TimelineInstagramController::class)->group(function () {
         Route::get('timelineInstagram', 'index')->name('timelineInstagram.index');
@@ -131,6 +136,8 @@ Route::group(['middleware' => ['auth']], function () {
         Route::get('/report-turlap', 'preview')->name('turlap.preview');
         Route::post('/preview-turlap', 'preview')->name('turlap.preview.data');
         Route::post('/export-turlap', 'export')->name('turlap.export.excel');
+        Route::get('/turlap/unduh-template-import/{id}', 'unduhTemplateImport')->name('turlap.unduhTemplateImport');
+        Route::post('/turlap/import', 'importTurlap')->name('turlap.import');
     });
 
     Route::controller(LeadsController::class)->group(function () {
@@ -146,6 +153,13 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('leads/{id}/followUp/update', 'followUpUpdate')->name('leads.followUpUpdate');
         Route::delete('leads/{id}/followUp/destroy', 'followUpDestroy')->name('leads.followUpDestroy');
         Route::get('data-leads', 'tampilLeads')->name('leads.tampilLeads');
+
+        Route::get('/report-leads', 'preview')->name('leads.preview');
+        Route::post('/preview-leads', 'preview')->name('leads.preview.data');
+        Route::post('/export-leads', 'export')->name('leads.export.excel');
+
+        Route::get('/leads/unduh-template-import/{id}', 'unduhTemplateImport')->name('leads.unduhTemplateImport');
+        Route::post('/leads/import', 'importLeads')->name('leads.import');
     });
 
     Route::controller(BrandController::class)->group(function () {
@@ -161,5 +175,19 @@ Route::group(['middleware' => ['auth']], function () {
         Route::put('brand/{id}/followUp/update', 'followUpUpdate')->name('brand.followUpUpdate');
         Route::delete('brand/{id}/followUp/destroy', 'followUpDestroy')->name('brand.followUpDestroy');
         Route::get('data-brand', 'tampilBrand')->name('brand.tampilBrand');
+
+        Route::get('/report-brand', 'preview')->name('brand.preview');
+        Route::post('/preview-brand', 'preview')->name('brand.preview.data');
+        Route::post('/export-brand', 'export')->name('brand.export.excel');
+        Route::get('/brand/unduh-template-import/{id}', 'unduhTemplateImport')->name('brand.unduhTemplateImport');
+        Route::post('/brand/import', 'importBrand')->name('brand.import');
+    });
+
+    Route::group(['prefix' => 'crm', 'as' => 'crm.'], function () {
+        Route::resource('/pertanyaan', PertanyaanController::class);
+
+        Route::controller(JadwalKunjunganController::class)->group(function () {
+            Route::get('jadwal-kunjungan', 'index')->name('jadwalKunjungan.index');
+        });
     });
 });

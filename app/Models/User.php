@@ -78,4 +78,10 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Marketing::class, 'follow_up_marketuser', 'user_id', 'marketing_id');
     }
+
+    public function jadwalKunjunganPic(): BelongsToMany
+    {
+        return $this->belongsToMany(JadwalKunjungan::class, 'jadwal_kunjungan_pic', 'pic_id', 'jadwal_kunjungan_id')
+            ->withTimestamps();
+    }
 }

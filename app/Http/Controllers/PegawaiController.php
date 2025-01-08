@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Routing\Controllers\Middleware;
+use Spatie\Permission\Models\Permission;
 
 class PegawaiController extends Controller implements HasMiddleware
 {
@@ -41,6 +42,7 @@ class PegawaiController extends Controller implements HasMiddleware
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="' . route('pegawai.edit', $row->id) . '" class="edit btn btn-warning btn-sm">Edit</a>';
+                    $btn .= '<a href="' . route('pegawai.setPermission', $row->akun->id) . '" class="edit btn btn-info btn-sm">Set Permission</a>';
                     $btn .= '<a href="javascript:void(0)" class="delete btn btn-danger btn-sm" onclick="deleteData(this)" data-url="' . route('pegawai.destroy', $row->id) . '">Hapus</a>';
                     return $btn;
                 })
@@ -60,14 +62,8 @@ class PegawaiController extends Controller implements HasMiddleware
     {
         $jabatan = Jabatan::all();
         $roles = Role::all();
-        $permissions = [
-            'View Sosmed Kadiv Dashboard',
-            'View Sosmed Pegawai Dashboard',
-            'View Marketing Pegawai Dashboard',
-            'View Marketing Kadiv Dashboard',
-        ];
 
-        return view('superadmin.pegawai.create', compact('jabatan', 'roles', 'permissions'));
+        return view('superadmin.pegawai.create', compact('jabatan', 'roles'));
     }
 
     /**
@@ -115,7 +111,7 @@ class PegawaiController extends Controller implements HasMiddleware
             ]);
 
             DB::commit();
-            return redirect()->route('pegawai.index')->with('message', 'Pegawai Berhasil Ditambahkan')->with('title', 'Success')->with('type', 'success');
+            return redirect()->route('pegawai.setPermission', ['id' => $akun->id])->with('message', 'Pegawai Berhasil Ditambahkan, Silahkan Setup Akses User')->with('title', 'Success')->with('type', 'success');
         } catch (\Throwable $th) {
             DB::rollBack();
             dd($th);
@@ -217,5 +213,19 @@ class PegawaiController extends Controller implements HasMiddleware
             dd($th);
             return redirect()->route('pegawai.index')->with('message', 'Pegawai Gagal Dihapus')->with('title', 'Failed')->with('type', 'error');
         }
+    }
+
+    public function setPermission(string $id)
+    {
+        $user = User::find($id);
+        $permissions = Permission::all()->groupBy('group');
+        return view('superadmin.pegawai.setup_permission', compact('user', 'permissions'));
+    }
+
+    public function storePermission(Request $request, string $id)
+    {
+        $user = User::find($id);
+        $user->syncPermissions($request->permissions);
+        return redirect()->route('pegawai.index')->with('message', 'Permission Berhasil Diatur')->with('title', 'Success')->with('type', 'success');
     }
 }

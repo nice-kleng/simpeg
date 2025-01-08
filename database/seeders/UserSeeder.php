@@ -25,52 +25,52 @@ class UserSeeder extends Seeder
 
         $superadmin->assignRole('Super Admin');
 
-        $contentCreatorJabatan = Jabatan::where('nama_jabatan', 'like', '%Konten%')->pluck('nama_jabatan', 'id')->toArray();
-        $marketingJabatan = Jabatan::whereIn('nama_jabatan', [
-            'Kepala Divisi Marketing',
-            'Spesialis SEO',
-            'Analis Pemasaran',
-            'Manajer Kampanye Digital',
-            'Spesialis Periklanan',
-            'Manajer Hubungan Pelanggan'
-        ])->pluck('nama_jabatan', 'id')->toArray();
+        // $contentCreatorJabatan = Jabatan::where('nama_jabatan', 'like', '%Konten%')->pluck('nama_jabatan', 'id')->toArray();
+        // $marketingJabatan = Jabatan::whereIn('nama_jabatan', [
+        //     'Kepala Divisi Marketing',
+        //     'Spesialis SEO',
+        //     'Analis Pemasaran',
+        //     'Manajer Kampanye Digital',
+        //     'Spesialis Periklanan',
+        //     'Manajer Hubungan Pelanggan'
+        // ])->pluck('nama_jabatan', 'id')->toArray();
 
-        $faker = Faker::create('id_ID');
+        // $faker = Faker::create('id_ID');
 
         // Create Content Creator users
-        for ($i = 0; $i < 10; $i++) {
-            $name = $faker->name;
-            $email = $faker->unique()->safeEmail;
+        // for ($i = 0; $i < 10; $i++) {
+        //     $name = $faker->name;
+        //     $email = $faker->unique()->safeEmail;
 
-            $user = User::create([
-                'name' => $name,
-                'email' => $email,
-                'password' => Hash::make('password'),
-            ]);
+        //     $user = User::create([
+        //         'name' => $name,
+        //         'email' => $email,
+        //         'password' => Hash::make('password'),
+        //     ]);
 
-            $user->assignRole('Content Creator');
+        //     $user->assignRole('Content Creator');
 
-            $jabatanId = $faker->randomElement(array_keys($contentCreatorJabatan));
-            $jabatanNama = $contentCreatorJabatan[$jabatanId];
+        //     $jabatanId = $faker->randomElement(array_keys($contentCreatorJabatan));
+        //     $jabatanNama = $contentCreatorJabatan[$jabatanId];
 
-            Pegawai::create([
-                'akun_id' => $user->id,
-                'jabatan_id' => $jabatanId,
-                'nik' => 'CC' . str_pad($i + 1, 3, '0', STR_PAD_LEFT),
-                'nama' => $name,
-                'wa' => $faker->phoneNumber,
-                'ttl' => $faker->city . ', ' . $faker->date(),
-                'alamat' => $faker->address,
-                'jenkel' => $faker->randomElement(['Laki-laki', 'Perempuan']),
-                'foto' => null,
-            ]);
+        //     Pegawai::create([
+        //         'akun_id' => $user->id,
+        //         'jabatan_id' => $jabatanId,
+        //         'nik' => 'CC' . str_pad($i + 1, 3, '0', STR_PAD_LEFT),
+        //         'nama' => $name,
+        //         'wa' => $faker->phoneNumber,
+        //         'ttl' => $faker->city . ', ' . $faker->date(),
+        //         'alamat' => $faker->address,
+        //         'jenkel' => $faker->randomElement(['Laki-laki', 'Perempuan']),
+        //         'foto' => null,
+        //     ]);
 
-            if (strpos(strtolower($jabatanNama), 'kepala divisi') !== false) {
-                $user->givePermissionTo('View Sosmed Kadiv Dashboard');
-            } else {
-                $user->givePermissionTo('View Sosmed Pegawai Dashboard');
-            }
-        }
+        //     if (strpos(strtolower($jabatanNama), 'kepala divisi') !== false) {
+        //         $user->givePermissionTo('View Sosmed Kadiv Dashboard');
+        //     } else {
+        //         $user->givePermissionTo('View Sosmed Pegawai Dashboard');
+        //     }
+        // }
 
         // Create Marketing users
         // for ($i = 0; $i < 10; $i++) {
@@ -107,22 +107,22 @@ class UserSeeder extends Seeder
         //     ]);
         // }
 
-        $marketingKadiv = User::create([
-            'name' => 'Marketing Kadiv',
-            'email' => 'marketingkadiv@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
+        // $marketingKadiv = User::create([
+        //     'name' => 'Marketing Kadiv',
+        //     'email' => 'marketingkadiv@gmail.com',
+        //     'password' => Hash::make('password'),
+        // ]);
 
-        $marketingKadiv->assignRole('Marketing');
-        $marketingKadiv->givePermissionTo('View Marketing Kadiv Dashboard');
+        // $marketingKadiv->assignRole('Marketing');
+        // $marketingKadiv->givePermissionTo('View Marketing Kadiv Dashboard');
 
-        $staffMarketing = User::create([
-            'name' => 'Staff Marketing',
-            'email' => 'staffmarketing@gmail.com',
-            'password' => Hash::make('password'),
-        ]);
+        // $staffMarketing = User::create([
+        //     'name' => 'Staff Marketing',
+        //     'email' => 'staffmarketing@gmail.com',
+        //     'password' => Hash::make('password'),
+        // ]);
 
-        $staffMarketing->assignRole('Marketing');
-        $staffMarketing->givePermissionTo('View Marketing Pegawai Dashboard');
+        // $staffMarketing->assignRole('Marketing');
+        // $staffMarketing->givePermissionTo('View Marketing Pegawai Dashboard');
     }
 }

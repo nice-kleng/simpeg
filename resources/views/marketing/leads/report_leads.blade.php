@@ -1,11 +1,11 @@
-@extends('layouts.app', ['pageTitle' => 'Report Turlap'])
+@extends('layouts.app', ['pageTitle' => 'Report Leads'])
 
 @section('content')
     <div class="row">
         <div class="col-md-12 col-sm-12">
             <div class="x_panel">
                 <div class="x_title">
-                    <h2>Report Turlap</h2>
+                    <h2>Report Leads</h2>
                     <div class="clearfix"></div>
                 </div>
                 <div class="x_content">
@@ -40,7 +40,7 @@
                                 <tbody id="preview-data"></tbody>
                             </table>
 
-                            <form action="{{ route('turlap.export.excel') }}" method="POST" class="mt-3">
+                            <form action="{{ route('leads.export.excel') }}" method="POST" class="mt-3">
                                 @csrf
                                 <input type="hidden" name="s_date" id="export_s_date">
                                 <input type="hidden" name="e_date" id="export_e_date">
@@ -68,7 +68,7 @@
                     }
 
                     $.ajax({
-                        url: '{{ route('turlap.preview.data') }}',
+                        url: '{{ route('leads.preview.data') }}',
                         type: 'POST',
                         data: {
                             _token: '{{ csrf_token() }}',

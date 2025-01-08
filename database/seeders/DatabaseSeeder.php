@@ -20,11 +20,11 @@ class DatabaseSeeder extends Seeder
             ProductSeeder::class,
             RolePermissionSeeder::class,
             UserSeeder::class,
-            TimelineInstagramSeeder::class,
-            ReportTimelineInstagramSeeder::class,
-            ReportTikTokLiveSeeder::class,
-            TimelineTikTokSeeder::class,
-            ReportTikTokSeeder::class,
+            // TimelineInstagramSeeder::class,
+            // ReportTimelineInstagramSeeder::class,
+            // ReportTikTokLiveSeeder::class,
+            // TimelineTikTokSeeder::class,
+            // ReportTikTokSeeder::class,
         ]);
     }
 }
