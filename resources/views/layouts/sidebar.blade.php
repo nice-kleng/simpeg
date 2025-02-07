@@ -71,6 +71,7 @@
             <li><a><i class="fa fa-users"></i> CRM <span class="fa fa-chevron-down"></span></a>
                 <ul class="nav child_menu">
                     <li><a href="{{ route('crm.pertanyaan.index') }}">Pertanyaan</a></li>
+                    <li><a href="{{ route('crm.jadwalKunjungan.index') }}">Jadwal Kunjungan</a></li>
                 </ul>
             </li>
         </ul>

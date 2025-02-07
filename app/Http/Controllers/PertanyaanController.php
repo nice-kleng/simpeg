@@ -4,10 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Pertanyaan;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controllers\HasMiddleware;
+use Illuminate\Routing\Controllers\Middleware;
 use Yajra\DataTables\DataTables;
 
-class PertanyaanController extends Controller
+class PertanyaanController extends Controller implements HasMiddleware
 {
+    public static function middleware(): array
+    {
+        return [
+            new Middleware('permission:View Pertanyaan', ['index']),
+        ];
+    }
     /**
      * Display a listing of the resource.
      */

@@ -188,6 +188,12 @@ Route::group(['middleware' => ['auth']], function () {
 
         Route::controller(JadwalKunjunganController::class)->group(function () {
             Route::get('jadwal-kunjungan', 'index')->name('jadwalKunjungan.index');
+            Route::post('jadwal-kunjungan', 'store')->name('jadwalKunjungan.store');
+            Route::get('jadwal-kunjungan/{id}/edit', 'edit')->name('jadwalKunjungan.edit');
+            Route::put('jadwal-kunjungan/update/{id}', 'update')->name('jadwalKunjungan.update');
+            Route::delete('jadwal-kunjungan/delete/{id}', 'destroy')->name('jadwalKunjungan.destroy');
+            Route::get('jdawal-kunjungan/{id}/jawaban-mitra', 'jawabanMitra')->name('jadwalKunjungan.jawabanMitra');
+            Route::post('jdawal-kunjungan/updateJawabanb', 'updateJawaban')->name('jadwalKunjungan.updateJawaban');
         });
     });
 });

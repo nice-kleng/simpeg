@@ -34,4 +34,9 @@ class Mitra extends Model
     {
         return $this->hasMany(Mitra::class, 'upline', 'id');
     }
+
+    public function jadwalKunjungan()
+    {
+        return $this->hasMany(JadwalKunjungan::class);
+    }
 }

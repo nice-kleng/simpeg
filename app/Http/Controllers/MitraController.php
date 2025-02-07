@@ -26,17 +26,17 @@ class MitraController extends Controller implements HasMiddleware
     public function index(Request $request)
     {
         if ($request->ajax()) {
-            $data = Mitra::all();
+            $data = Mitra::with(['upline', 'downline'])->get();
             return DataTables::of($data)
                 ->addIndexColumn('DT_RowIndex')
                 ->addColumn('tanggal', function ($row) {
                     return Carbon::parse($row->tanggal)->locale('id')->isoFormat('DD MMMM YYYY');
                 })
                 ->addColumn('upline', function ($row) {
-                    return $row->upline ? $row->upline->nama : '-';
+                    return optional($row->upline)->nama ?? '-';
                 })
                 ->addColumn('downline', function ($row) {
-                    return $row->downline->pluck('nama')->implode(', ');
+                    return $row->downline ? $row->downline->pluck('nama')->implode(', ') : '-';
                 })
                 ->addColumn('action', function ($row) {
                     $btn = '<a href="' . route('mitra.edit', $row->id) . '" class="edit btn btn-primary btn-sm">Edit</a>';

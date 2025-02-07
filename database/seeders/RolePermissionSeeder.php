@@ -34,6 +34,12 @@ class RolePermissionSeeder extends Seeder
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
+            [
+                'name' => 'CRM',
+                'guard_name' => 'web',
+                'created_at' => now(),
+                'updated_at' => now(),
+            ],
         ];
 
         Role::insert($role);
@@ -64,6 +70,11 @@ class RolePermissionSeeder extends Seeder
             ],
             [
                 'name' => 'View Marketing Pegawai Dashboard',
+                'guard_name' => 'web',
+                'group' => 'dashboard',
+            ],
+            [
+                'name' => 'View CRM Dashboard',
                 'guard_name' => 'web',
                 'group' => 'dashboard',
             ],
@@ -261,6 +272,16 @@ class RolePermissionSeeder extends Seeder
                 'name' => 'Delete Sumber Marketing',
                 'guard_name' => 'web',
                 'group' => 'marketing',
+            ],
+            [
+                'name' => 'View Pertanyaan',
+                'guard_name' => 'web',
+                'group' => 'crm',
+            ],
+            [
+                'name' => 'View Jadwal Kunjungan',
+                'guard_name' => 'web',
+                'group' => 'crm',
             ],
         ];
 

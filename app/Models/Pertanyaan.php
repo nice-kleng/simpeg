@@ -11,8 +11,10 @@ class Pertanyaan extends Model
 
     protected $fillable  = ['pertanyaan'];
 
-    public function jadwal()
+    public function jadwalKunjungan()
     {
-        return $this->belongsTo(JadwalKunjungan::class);
+        return $this->belongsToMany(JadwalKunjungan::class, 'jawaban_mitras')
+            ->withPivot('jawaban')
+            ->withTimestamps();
     }
 }

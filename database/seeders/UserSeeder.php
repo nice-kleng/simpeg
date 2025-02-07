@@ -25,6 +25,31 @@ class UserSeeder extends Seeder
 
         $superadmin->assignRole('Super Admin');
 
+        // $jabatan = [14, 15, 16];
+        // for ($i = 0; $i < 4; $i++) {
+        //     $name = fake('id_ID')->name;
+        //     $email = fake('id_ID')->unique()->safeEmail;
+        //     $user = User::create([
+        //         'name' => $name,
+        //         'email' => $email,
+        //         'password' => Hash::make('password'),
+        //     ]);
+
+        //     $user->assignRole('CRM');
+
+        //     Pegawai::create([
+        //         'akun_id' => $user->id,
+        //         'jabatan_id' => fake()->randomElement($jabatan),
+        //         'nik' => fake('id_ID')->nik,
+        //         'nama' => $name,
+        //         'wa' => fake()->phoneNumber,
+        //         'ttl' => fake()->city . ', ' . fake()->date(),
+        //         'alamat' => fake()->address,
+        //         'jenkel' => fake()->randomElement(['Laki-laki', 'Perempuan']),
+        //         'foto' => null,
+        //     ]);
+        // }
+
         // $contentCreatorJabatan = Jabatan::where('nama_jabatan', 'like', '%Konten%')->pluck('nama_jabatan', 'id')->toArray();
         // $marketingJabatan = Jabatan::whereIn('nama_jabatan', [
         //     'Kepala Divisi Marketing',
